@@ -37,6 +37,7 @@ def check_password():
             if user_password == password:
                 st.session_state.password_entered = True
                 password_form.empty()  # clear the form
+                st.experimental_rerun()  
             elif user_password != "":
                 st.error("the password you entered is incorrect")
     else:
