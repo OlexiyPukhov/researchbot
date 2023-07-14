@@ -20,14 +20,36 @@ from langchain.memory import ConversationBufferMemory
 #def init():
 #    load_dotenv()
 
+password = os.environ.get('PASSWORD')
 
+def check_password():
+    if "password_entered" not in st.session_state:
+        st.session_state.password_entered = False
+
+    if not st.session_state.password_entered:
+        password_form = st.sidebar.empty()
+
+        with password_form.form(key='password_form'):
+            user_password = st.text_input("Enter a password", type="password")
+            submit_password = st.form_submit_button('Enter')
+
+        if submit_password:
+            if user_password == password:
+                st.session_state.password_entered = True
+                password_form.empty()  # clear the form
+            elif user_password != "":
+                st.error("the password you entered is incorrect")
+    else:
+        return True
+
+    return st.session_state.password_entered
 
 def main():    
 
     #init()
-    st.set_page_config(
-        page_title= "AI Researcher",
-    )
+    #st.set_page_config(
+    #    page_title= "AI Researcher",
+    #)
     
     custom_css = """
     <style>
@@ -118,4 +140,5 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    if check_password():
+        main()
